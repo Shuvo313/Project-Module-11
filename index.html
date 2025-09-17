@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Student Management System</title>
+  </head>
+  <body>
+    <h1>Open Console to See Output</h1>
+  </body>
+  <script>
+    let students = [];
+    let idCounter = 1;
+
+    function addStudent(name, marks) {
+      let grade;
+
+      if (marks >= 80 && marks <= 100) {
+        grade = "A+";
+      } else if (marks >= 70 && marks < 80) {
+        grade = "A";
+      } else if (marks >= 60 && marks < 70) {
+        grade = "B";
+      } else {
+        grade = "Fail";
+      }
+
+      let student = {
+        id: idCounter++,
+        name: name,
+        marks: marks,
+        grade: grade,
+      };
+
+      students.push(student);
+      return student;
+    }
+
+    // Find Single Student By Id
+    function findStudent(id) {
+      debugger;
+      let result;
+      switch (true) {
+        case students.length === 0:
+          result = "No Student Found";
+          break;
+        default:
+          result = students.find((s) => s.id === id) || "Student Not Found";
+      }
+
+      return result;
+    }
+
+    // For loop ->  Find All Students
+    function showStudents() {
+      console.log("Students List");
+      for (let i = 0; i < students.length; i++) {
+        console.log(
+          `ID: ${students[i].id}, Name: ${students[i].name}, Marks: ${students[i].marks}, Grade: ${students[i].grade}`
+        );
+      }
+    }
+
+    // Total Marks
+    function totalMarks() {
+      let i = 0,
+        total = 0;
+      while (i < students.length) {
+        total += students[i].marks;
+        i++;
+      }
+      return total;
+    }
+
+    function showMessages() {
+      let printed = false;
+      do {
+        console.log("Welcome to Student Management System");
+        printed = true;
+      } while (!printed);
+    }
+
+    // Student Details
+    function showStudentsDetails(student) {
+      console.log("Student Details:");
+      for (let key in student) {
+        console.log(`${key}: ${student[key]}`);
+      }
+    }
+
+    let deleteStudent = function (id) {
+      let index = students.findIndex((s) => s.id === id);
+      if (index !== -1) {
+        students.splice(index, 1);
+        return `Student with ID ${id} has been deleted.`;
+      } else {
+        return `Student with ID ${id} not found.`;
+      }
+    };
+
+    // Average Marks
+    let averageMarks = () => {
+      if (students.length === 0) return 0;
+      return totalMarks() / students.length;
+    };
+
+    showMessages();
+    addStudent("Sajid", 85);
+    addStudent("Kalam", 72);
+    addStudent("Jitu", 58);
+    showStudents();
+    // console.log(findStudent(2)); // Find student with ID 2
+    // console.log(findStudent(5)); // Find student with ID 5 (not found)
+    showStudentsDetails(students[0]);
+    // console.log(deleteStudent(2)); // Delete student with ID 2
+    // showStudents(); // Show remaining students
+    console.log("Total Marks:", totalMarks());
+    console.log("Average Marks:", averageMarks());
+  </script>
+</html>
