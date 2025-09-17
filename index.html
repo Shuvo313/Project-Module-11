@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Student Management System</title>
+    <title>Student Grade Management System</title>
   </head>
   <body>
     <h1>Open Console to See Output</h1>
@@ -12,6 +12,16 @@
     let students = [];
     let idCounter = 1;
 
+    // Welcome Message - using do-while loop
+    function showWelcomeMessage() {
+      let printed = false;
+      do {
+        console.log("Welcome to Student Grade Management System");
+        printed = true;
+      } while (!printed);
+    }
+
+    // Add a student with name, marks, and calculate grade
     function addStudent(name, marks) {
       let grade;
 
@@ -36,9 +46,8 @@
       return student;
     }
 
-    // Find Single Student By Id
+    // Find Student By ID - using switch case
     function findStudent(id) {
-      debugger;
       let result;
       switch (true) {
         case students.length === 0:
@@ -47,13 +56,12 @@
         default:
           result = students.find((s) => s.id === id) || "Student Not Found";
       }
-
       return result;
     }
 
-    // For loop ->  Find All Students
+    // Display student list with name, marks, and grade - using for loop
     function showStudents() {
-      console.log("Students List");
+      console.log("Students List:");
       for (let i = 0; i < students.length; i++) {
         console.log(
           `ID: ${students[i].id}, Name: ${students[i].name}, Marks: ${students[i].marks}, Grade: ${students[i].grade}`
@@ -61,10 +69,22 @@
       }
     }
 
-    // Total Marks
+    // Display only students who passed (grade != 'Fail')
+    function showPassedStudents() {
+      console.log("Passed Students:");
+      for (let i = 0; i < students.length; i++) {
+        if (students[i].grade !== "Fail") {
+          console.log(
+            `ID: ${students[i].id}, Name: ${students[i].name}, Marks: ${students[i].marks}, Grade: ${students[i].grade}`
+          );
+        }
+      }
+    }
+
+    // Total Marks (using while loop)
     function totalMarks() {
-      let i = 0,
-        total = 0;
+      let i = 0;
+      let total = 0;
       while (i < students.length) {
         total += students[i].marks;
         i++;
@@ -72,49 +92,75 @@
       return total;
     }
 
-    function showMessages() {
-      let printed = false;
-      do {
-        console.log("Welcome to Student Management System");
-        printed = true;
-      } while (!printed);
-    }
-
-    // Student Details
-    function showStudentsDetails(student) {
-      console.log("Student Details:");
-      for (let key in student) {
-        console.log(`${key}: ${student[key]}`);
-      }
-    }
-
-    let deleteStudent = function (id) {
-      let index = students.findIndex((s) => s.id === id);
-      if (index !== -1) {
-        students.splice(index, 1);
-        return `Student with ID ${id} has been deleted.`;
-      } else {
-        return `Student with ID ${id} not found.`;
-      }
-    };
-
-    // Average Marks
+    // Average Marks (using arrow function)
     let averageMarks = () => {
       if (students.length === 0) return 0;
       return totalMarks() / students.length;
     };
 
-    showMessages();
+    // Delete Student using anonymous function and dynamically find students who failed
+    let deleteFailedStudents = function () {
+      let failedStudents = students.filter(
+        (student) => student.grade === "Fail"
+      );
+      failedStudents.forEach((student) => {
+        let index = students.findIndex((s) => s.id === student.id);
+        if (index !== -1) {
+          students.splice(index, 1);
+        }
+      });
+      return `Deleted ${failedStudents.length} failed student(s).`;
+    };
+
+    // Show student details for a specific student (using switch case)
+    function showStudentDetails(id) {
+      let student = findStudent(id);
+      if (student === "No Student Found" || student === "Student Not Found") {
+        console.log(student);
+      } else {
+        console.log("Student Details:");
+        for (let key in student) {
+          console.log(`${key}: ${student[key]}`);
+        }
+      }
+    }
+
+    // Find the student who secured the first position (highest marks)
+    function findTopStudent() {
+      let topStudent = students.reduce((prev, current) =>
+        prev.marks > current.marks ? prev : current
+      );
+      console.log("Top Student:");
+      showStudentDetails(topStudent.id);
+    }
+
+    // Run the system
+    showWelcomeMessage();
+
+    // Add some students
     addStudent("Sajid", 85);
     addStudent("Kalam", 72);
     addStudent("Jitu", 58);
+    addStudent("Ravi", 92);
+    addStudent("Simi", 67);
+
+    // Show the full student list
     showStudents();
-    // console.log(findStudent(2)); // Find student with ID 2
-    // console.log(findStudent(5)); // Find student with ID 5 (not found)
-    showStudentsDetails(students[0]);
-    // console.log(deleteStudent(2)); // Delete student with ID 2
-    // showStudents(); // Show remaining students
+
+    // Show students who passed
+    showPassedStudents();
+
+    // Find and display the top student
+    findTopStudent();
+
+    // Show Total and Average Marks
     console.log("Total Marks:", totalMarks());
     console.log("Average Marks:", averageMarks());
+
+    // Delete failed students
+    console.log(deleteFailedStudents());
+
+    // Show updated student list after deletion
+    showStudents();
   </script>
 </html>
